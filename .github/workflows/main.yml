@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Blog Builder
-        uses: supplient/Actions_BlogBuilder@main
+        uses: supplient/Actions_BlogBuilder@v1
         with:
           markdown_dir: ./md
           html_dir: ./html
