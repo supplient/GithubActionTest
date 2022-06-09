@@ -27,7 +27,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Copy resouces & Make Index & md=>html
-        run: sh ./docker.sh
+        uses: supplient/Actions_BlogBuilder
+        with:
+          markdown_dir: ./md
+          html_dir: ./html
+        # run: sh ./docker.sh
         
       - name: Deploy to gp-pages
         uses: peaceiris/actions-gh-pages@v3
