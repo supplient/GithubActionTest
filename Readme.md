@@ -2,6 +2,11 @@
 
 过程：启动一个docker container，镜像为pandoc/latex，随后在这个container里面执行工作脚本
 
+# 拷贝资源文件
+一句话：`cp -R ./md/* ./html`
+
+不然html文件索引不到图片、视频之类的。
+
 # 生成目录文件index.md
 一句话：`bash ./make_index.sh ./md`
 

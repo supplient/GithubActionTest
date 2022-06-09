@@ -26,7 +26,7 @@ do
 		sh ./$0 ${filepath}
 	elif [[ ${filepath##*.} == "md" && ${filepath##*/} != "index.md" ]]
 	then
-		# 
+		# 对每个非index.md的.md文件建立 到其对应的html文件 的索引项
 		filename=${filepath##*/}
 		filename="${filename%.*}.html"
 		echo "[${filename}]($filename)" >> $indexpath
