@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>My Blog</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="https://gist.githubusercontent.com/supplient/1726b3acbfed278f54b66cf11129a43b/raw/62b874d98f72005d18b9b2a05d3be6815959b51b/gh-pandoc.css" />
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">My Blog</h1>
+</header>
+<p>#! https://zhuanlan.zhihu.com/p/511502862 # 论文阅读：Fast Simulation
+of Mass-Spring Systems</p>
+<p>本文为对<a
+href="https://www.cs.utah.edu/~ladislav/liu13fast/liu13fast.html">Fast
+Simulation of Mass-Spring
+Systems</a>的阅读笔记。本文并非翻译性质或公式推导性质的文章，文章的结构和内容与原论文有极大出入，甚至记号都不一致。内容以我个人的理解为主，不过只要我理解没有问题，那本文介绍的方法和原论文里的应该是一致的。</p>
+<p>若有不正之处，烦请指正。</p>
+<h1 id="一隐式欧拉法">一、隐式欧拉法</h1>
+<p>从使用隐式欧拉法求解牛顿运动方程开始：</p>
+<p><span class="math display">\[
+\begin{aligned}
+x^{n+1} = x^n + Δtv^{n+1} \\
+v^{n+1} = v^n + Δta^{n+1} \\
+\end{aligned}
+\]</span></p>
+<p>假设加速度分为外力<span
+class="math inline">\(F_{ext}\)</span>与内力<span
+class="math inline">\(F_{int}\)</span>，且<span
+class="math inline">\(F_{ext}\)</span>与<span
+class="math inline">\(x\)</span>无关（或设它与<span
+class="math inline">\(x^n\)</span>有关，而非<span
+class="math inline">\(x^{n+1}\)</span>），<span
+class="math inline">\(F_{int}\)</span>为<span
+class="math inline">\(x\)</span>的函数，即<span
+class="math inline">\(a^{n+1}=M^{-1}(F_{ext}+F_{int}(x^{n+1}))\)</span>。</p>
+<p>把<span class="math inline">\(a^{n+1}\)</span>代入上式中，并把<span
+class="math inline">\(v^{n+1}\)</span>消掉，得到：</p>
+<p><span class="math display">\[
+x^{n+1}=x^n+Δtv^n+Δt^2M^{-1}(F_{ext}+F_{int}(x^{n+1}))
+\]</span></p>
+<p>设<span
+class="math inline">\(\tilde{x}=x^n+Δtv^n+Δt^2M^{-1}F_{ext}\)</span>，并略去上标<span
+class="math inline">\(n+1\)</span>，则有：</p>
+<p><span class="math display">\[
+M(x-\tilde{x})=Δt^2F_{int}(x)
+\]</span></p>
+<p>我们的目标是解出上式的<span
+class="math inline">\(x\)</span>，式中左边的<span
+class="math inline">\(x\)</span>是个线性项，在解方程时候很好处理，但右边的<span
+class="math inline">\(F_{int}(x)\)</span>还没定义。</p>
+<p>论文里认为<span
+class="math inline">\(F_{int}\)</span>是个保守力，即是说它是由某种势能产生的力。设该势能为<span
+class="math inline">\(U\)</span>：</p>
+<p><span class="math display">\[
+F_{int}=-∇U
+\]</span></p>
+<p>代入隐式欧拉法的方程里：</p>
+<p><span class="math display">\[
+\tag{1}
+M(x-\tilde{x})=-Δt^2∇U(x)
+\]</span></p>
+<p>1式是不是线性方程组这就完全是由<span
+class="math inline">\(U\)</span>的定义决定的了。</p>
+<h1 id="二一个小例子">二、一个小例子</h1>
+<p>通常而言<span class="math inline">\(∇U(x)\)</span>都不是关于<span
+class="math inline">\(x\)</span>的线性项。</p>
+<p>例如对于两个质点之间的弹性势能<span
+class="math inline">\(U=\frac{1}{2}(||x_2-x_1||-l)^2\)</span>，<span
+class="math inline">\(x_1, x_2\)</span>为质点位移，<span
+class="math inline">\(l\)</span>为弹簧的rest length。其关于<span
+class="math inline">\(x\)</span>的梯度<span
+class="math inline">\(∇U\)</span>为：</p>
+<p><span class="math display">\[
+∇U =
+\begin{bmatrix}
+    x_1-x_2-\frac{l}{||x_2-x_1||}(x_1-x_2) \\
+    x_2-x_1-\frac{l}{||x_2-x_1||}(x_2-x_1) \\
+\end{bmatrix}
+\]</span></p>
+<p>注意到<span
+class="math inline">\(∇U\)</span>的非线性性质基本都是由<span
+class="math inline">\(\frac{l}{||x_2-x_1||}\)</span>引入的。</p>
+<p>引入变量<span class="math inline">\(\hat{x}\)</span>:</p>
+<p><span class="math display">\[
+\hat{x} =
+\begin{bmatrix}
+    \hat{x}_1 \\
+    \hat{x}_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+    \frac{l}{||x_2-x_1||}(x_1-x_2) \\
+    \frac{l}{||x_2-x_1||}(x_2-x_1) \\
+\end{bmatrix}
+\]</span></p>
+<p>则<span class="math inline">\(∇U\)</span>变为：</p>
+<p><span class="math display">\[
+∇U =
+\begin{bmatrix}
+    x_1-x_2-\hat{x}_1 \\
+    x_2-x_1-\hat{x}_2 \\
+\end{bmatrix}
+\]</span></p>
+<p>注意到如果我们认为<span
+class="math inline">\(\hat{x}\)</span>是个与<span
+class="math inline">\(x\)</span>无关的变量，那么<span
+class="math inline">\(∇U(x)\)</span>就是个<span
+class="math inline">\(x\)</span>的线性项了，于是1式的求解（隐式欧拉法的求解）就变成了个线性方程组求解了。</p>
+<p>那么此时我们该怎么计算<span
+class="math inline">\(\hat{x}\)</span>呢？显然我们得代入个<span
+class="math inline">\(x\)</span>才能算出来呀。现在我们把上标<span
+class="math inline">\(n+1\)</span>, <span
+class="math inline">\(n\)</span>给取回来。我们想求的是<span
+class="math inline">\(x^{n+1}\)</span>，我们假设<span
+class="math inline">\(\hat{x}\)</span>与之无关的也是<span
+class="math inline">\(x^{n+1}\)</span>，这就避免了1式变成<span
+class="math inline">\(x^{n+1}\)</span>的非线性方程组。而我们已知的量是<span
+class="math inline">\(x^n\)</span>，所以我们可以把<span
+class="math inline">\(x^n\)</span>代入<span
+class="math inline">\(\hat{x}\)</span>。</p>
+<p>这本质就是把<span
+class="math inline">\(∇U\)</span>的一部分用显式欧拉法的方法来处理了。</p>
+<h1 id="三形式化弹簧约束">三、形式化：弹簧约束</h1>
+<p>我们把上一节中的小例子给形式化写一下。</p>
+<p>设有一组弹簧约束<span class="math inline">\(C=[C_1\ C_2\ \cdots\
+C_m]^T\)</span>, <span
+class="math inline">\(C_i=||x_{s_i}-x_{t_i}||-l_i\)</span>, 其中<span
+class="math inline">\(s_i, t_i, l_i\)</span>为已知量。</p>
+<p>则弹簧势能<span
+class="math inline">\(U=\frac{1}{2}C^TC\)</span>，其梯度为</p>
+<p><span class="math display">\[
+∇U=∇C^TC = \begin{bmatrix}
+    \sum_i\frac{∂C_i}{∂x_j}C_i
+\end{bmatrix}_{n×1}
+\]</span></p>
+<p>这里为了简略，只写了第<span
+class="math inline">\(j\)</span>项的表达式，<span
+class="math inline">\(∇U\)</span>为一个n维的列向量。</p>
+<p>与上一节一样，引入变量<span
+class="math inline">\(\hat{x}\)</span>：</p>
+<p><span class="math display">\[
+\hat{x}=\begin{bmatrix}
+    \frac{l_i}{||x_{s_i}-x_{t_i}||}(x_{s_i}-x_{t_i})
+\end{bmatrix}_{m×1}
+\]</span></p>
+<p>为了方便，记<span
+class="math inline">\(D_i=x_{s_i}-x_{t_i}\)</span>，则有：</p>
+<p><span class="math display">\[
+\frac{∂C_i}{∂x_j}C_i=
+\left\{
+\begin{aligned}
+    &amp;D_i - \hat{x}_i    &amp;, \text{if}\ j=s_i \\
+    -&amp;D_i + \hat{x}_i   &amp;, \text{if}\ j=t_i \\
+    &amp;0                  &amp;, \text{otherwise} \\
+\end{aligned}
+\right.
+\]</span></p>
+<p>显然，如果<span class="math inline">\(\hat{x}\)</span>与<span
+class="math inline">\(x\)</span>无关的话，那么<span
+class="math inline">\(\frac{∂C_i}{∂x_j}C_i\)</span>就是个关于<span
+class="math inline">\(x\)</span>的线性项，而求和<span
+class="math inline">\(\sum_i\frac{∂C_i}{∂x_j}C_i\)</span>显然也是个关于<span
+class="math inline">\(x\)</span>的线性项（n个线性项的和肯定还是线性项），所以此时<span
+class="math inline">\(∇U\)</span>就是个关于<span
+class="math inline">\(x\)</span>的线性项。</p>
+<p>如果把这个<span
+class="math inline">\(∇U\)</span>代回1式的话，那就是解个线性方程组了。</p>
+<h1 id="四讨论">四、讨论</h1>
+<p>原文中是把该问题视为一个使用block coordinate descent分别对<span
+class="math inline">\(\hat{x},
+x\)</span>进行优化的二次优化问题，相当于是： 1. 第一次优化：把计算<span
+class="math inline">\(\hat{x}(x^n)\)</span>的过程视为local step 2.
+第二次优化：把求解隐式欧拉法方程的过程视为global step</p>
+<p>实际的处理过程与我上文中讨论的其实是一样的，本质也就是在处理<span
+class="math inline">\(∇U(x^{n+1})\)</span>时，把其中非线性的部分剥离出来单独用显式方法处理。</p>
+<p>除此之外，注意到上文中没有更新速度。原文中采取了和XPBD一样的做法，将“外力和惯性速度”与“势能力”区分开来处理，然后对“外力和惯性速度”使用韦尔莱积分法。所以这里和XPBD的区别仅仅只是求解只有“势能力”的系统的运动方程时用了不同的方法。</p>
+<p>总结来说，这篇论文（Projective Dynamics的前身）的关键点是： *
+抽离出<span
+class="math inline">\(∇U\)</span>中的非线性部分，并用显式方法处理它，从而使得隐式欧拉法的求解方程变为一个线性方程组。</p>
+<p>然后Projective Dynamics那篇论文我应该短时间内不会写它的paper
+reading，因为那篇论文的主要贡献是对连续体里的<span
+class="math inline">\(∇U\)</span>给出各种各样抽离非线性部分的方法，但我对FEM不熟悉，所以看不太懂。</p>
+<h1 id="追记与拟牛顿法的关系">2022.5.10追记：与拟牛顿法的关系</h1>
+<p>在<a
+href="https://www.cs.utah.edu/~ladislav/liu17towards/liu17towards.pdf">Quasi-Newton
+Methods for Real-time Simulation of Hyperelastic
+Materials</a>一文中，作者站的视角就和本文差不多了，他注意到PD的本质是一种拟牛顿法。拟牛顿法解方程就是用找东西去近似方程的一阶导数（最优化视角看的话，那就是找东西去近似目标函数的二阶导数）。</p>
+<p>在这重新列一下1式，这是我们想解的方程：</p>
+<p><span class="math display">\[
+\tag{1}
+M(x-\tilde{x})=-Δt^2∇U(x)
+\]</span></p>
+<p>我们把前文中“抽离<span
+class="math inline">\(∇U\)</span>中的非线性部分”这一思想给泛化一下，设：</p>
+<p><span class="math display">\[
+∇U(x) = Lx+D(x)
+\]</span></p>
+<p>其中，<span class="math inline">\(L\)</span>为一个<span
+class="math inline">\(R^n→R^n\)</span>的线性映射，<span
+class="math inline">\(Lx\)</span>即为关于<span
+class="math inline">\(x\)</span>的线性项，<span
+class="math inline">\(D(x)\)</span>为一个非线性函数。</p>
+<p>代入1式得到：</p>
+<p><span class="math display">\[
+\tag{2}
+(M+Δt^2L)x=M\tilde{x}-Δt^2D(x)
+\]</span></p>
+<p>Projective Dynamics的思想就是把2式右边的<span
+class="math inline">\(D(x)\)</span>给用显式方法处理，认为<span
+class="math inline">\(D(x)\)</span>与欲求的<span
+class="math inline">\(x^{n+1}\)</span>无关，而与已知的<span
+class="math inline">\(x^n\)</span>有关。从而使得2式是个线性方程组，可以直接快速求解。</p>
+<p>关于显式方法处理<span
+class="math inline">\(D(x)\)</span>，也可以理解为做泰勒展开：<span
+class="math inline">\(D(x^{n+1})≈D(x^n)+∇D(x^n)(x^{n+1}-x^n)\)</span>，然后假设<span
+class="math inline">\(∇D(x^n)=0\)</span>，那么就得到<span
+class="math inline">\(D(x^{n+1})≈D(x^n)\)</span>。</p>
+<p>所以如果不使用这一思想的话，就得求<span
+class="math inline">\(∇D(x^n)\)</span>了。注意到</p>
+<p><span class="math display">\[
+\begin{aligned}
+∇U &amp;= Lx + D \\
+\stackrel{两边求导}{⇒} H(U) &amp;= L + ∇D
+\end{aligned}
+\]</span></p>
+<p>所以要求<span class="math inline">\(∇D\)</span>，也就是要求<span
+class="math inline">\(U\)</span>的Hessian矩阵<span
+class="math inline">\(H(U)\)</span>了。那二阶导数的计算量可就大了。</p>
+<p>拟牛顿法就是找个矩阵去近似<span
+class="math inline">\(H(U)\)</span>，这里设<span
+class="math inline">\(H(U)(x^n)=L\)</span>也属于一种近似的方法。</p>
+<p>然后这篇论文我最近也不会写paper
+reading，因为他主要贡献是材质刚度计算的问题，我对FEM不熟悉，看不懂。</p>
+</body>
+</html>
