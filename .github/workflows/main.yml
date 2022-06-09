@@ -31,14 +31,11 @@ jobs:
         with:
           path: "${{ github.workspace }}/md"
 
-      - name: Debug
-        run: ls "${{ github.workspace }}/md"
-
       - name: Blog Builder
         uses: supplient/Actions_BlogBuilder@main
         with:
-          markdown_dir: "${{ github.workspace }}/md"
-          html_dir: "${{ github.workspace }}/html"
+          markdown_dir: "/github/workspace/md"
+          html_dir: "/github/workspace/html"
           title: "测试用博客"
         
       - name: Deploy to gp-pages
