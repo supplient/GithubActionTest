@@ -26,12 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Copy resouces & Make Index & md=>html
+      - name: Blog Builder
         uses: supplient/Actions_BlogBuilder@main
         with:
           markdown_dir: ./md
           html_dir: ./html
-        # run: sh ./docker.sh
+          title: "测试用博客"
         
       - name: Deploy to gp-pages
         uses: peaceiris/actions-gh-pages@v3
