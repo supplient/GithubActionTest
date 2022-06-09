@@ -31,6 +31,9 @@ jobs:
         with:
           path: "${{ github.workspace }}/md"
 
+      - name: Debug
+        run: ls "${{ github.workspace }}/md"
+
       - name: Blog Builder
         uses: supplient/Actions_BlogBuilder@main
         with:
