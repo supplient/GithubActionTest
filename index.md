@@ -1,4 +1,2 @@
-[blogs](blogs/index.html)
-
-[problem](problem/index.html)
-
+* [blogs](./blogs/index.html)
+* [problem](./problem/index.html)
