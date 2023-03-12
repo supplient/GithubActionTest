@@ -29,8 +29,8 @@ jobs:
           path: "${{ github.workspace }}"
 
       - name: Blog Builder with HTML and PDF 
-        # uses: supplient/Actions_HTMLPDFBlogBuilder@main
-        uses: ./.github/actions/make_index
+        uses: supplient/Actions_HTMLPDFBlogBuilder@main
+        # uses: ./.github/actions/make_index
         with:
           root_dir: "/github/workspace"
         
