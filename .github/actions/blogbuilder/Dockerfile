@@ -1,3 +1,3 @@
-FROM python
+FROM pandoc/latex
 COPY ./*.sh /
-ENTRYPOINT ["bash", "/work.sh"]
+ENTRYPOINT ["sh", "/work.sh"]
