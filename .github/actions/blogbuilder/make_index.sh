@@ -28,9 +28,15 @@ do
 		echo "" >> $indexpath
 		# 对子目录进行递归操作
 		sh $0 ${filepath}
-	elif [[ ${filepath##*.} == "pdf" ] || [ ${filepath##*.} == "html" ]]
+	elif [[ ${filepath##*.} == "pdf" ]]
 	then
-		# 对每个.html和.pdf文件建立 到它自己 的索引项
+		# 对每个.pdf文件建立 到它 的索引项
+		filename=${filepath##*/}
+		echo "[${filename}]($filename)" >> $indexpath
+		echo "" >> $indexpath
+	elif [[ ${filepath##*.} == "html" ]]
+	then
+		# 对每个.html文件建立 到它 的索引项
 		filename=${filepath##*/}
 		echo "[${filename}]($filename)" >> $indexpath
 		echo "" >> $indexpath
