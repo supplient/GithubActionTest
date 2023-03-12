@@ -1,114 +1,64 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>测试用博客</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {   }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #7d9029; } /* Attribute */
-    code span.bn { color: #40a070; } /* BaseN */
-    code span.bu { color: #008000; } /* BuiltIn */
-    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4070a0; } /* Char */
-    code span.cn { color: #880000; } /* Constant */
-    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-    code span.dt { color: #902000; } /* DataType */
-    code span.dv { color: #40a070; } /* DecVal */
-    code span.er { color: #ff0000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #40a070; } /* Float */
-    code span.fu { color: #06287e; } /* Function */
-    code span.im { color: #008000; font-weight: bold; } /* Import */
-    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-    code span.op { color: #666666; } /* Operator */
-    code span.ot { color: #007020; } /* Other */
-    code span.pp { color: #bc7a00; } /* Preprocessor */
-    code span.sc { color: #4070a0; } /* SpecialChar */
-    code span.ss { color: #bb6688; } /* SpecialString */
-    code span.st { color: #4070a0; } /* String */
-    code span.va { color: #19177c; } /* Variable */
-    code span.vs { color: #4070a0; } /* VerbatimString */
-    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-  </style>
-  <link rel="stylesheet" href="https://gist.githubusercontent.com/supplient/1726b3acbfed278f54b66cf11129a43b/raw/62b874d98f72005d18b9b2a05d3be6815959b51b/gh-pandoc.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-</head>
-<body>
-<header id="title-block-header">
-<h1 class="title">测试用博客</h1>
-</header>
-<p>#! https://zhuanlan.zhihu.com/p/418985780 # CUDA中原子锁的实现</p>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>CUDA&#x4e2d;&#x539f;&#x5b50;&#x9501;&#x7684;&#x5b9e;&#x73b0;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <p>#! <a href="https://zhuanlan.zhihu.com/p/418985780">https://zhuanlan.zhihu.com/p/418985780</a></p>
+<h1 id="cuda中原子锁的实现">CUDA中原子锁的实现</h1>
 <h1 id="问题一个需要锁的场景">问题：一个需要锁的场景</h1>
-<p>假设我有这么一个函数需要若干线程并行执行（也就是临界区critical
-section）：</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>__device__ <span class="dt">void</span> device_TestFunc<span class="op">(</span><span class="dt">uint32_t</span> ti<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%i</span><span class="st"> entered with value </span><span class="sc">%i\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)</span>ti<span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)*</span>value<span class="op">);</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>value <span class="op">=</span> <span class="op">*</span>value <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%i</span><span class="st"> exited with value </span><span class="sc">%i\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)</span>ti<span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)*</span>value<span class="op">);</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>假设我有这么一个函数需要若干线程并行执行（也就是临界区critical section）：</p>
+<pre><code class="language-c++"><span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">device_TestFunc</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ti, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i entered with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+	*value = *value + <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i exited with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+}
+</code></pre>
 <p>就是自增value指向的值，其实最好是直接使用atomicInc或者atomicAdd这些原子操作函数的，不过我们这边为了演示，还是自己手动实现一个原子锁。</p>
 <p>如果不上锁的话，kernel就大概是这么写（host端的代码最后再一起放出来）：</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_origin<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_origin</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+}
+</code></pre>
 <p>此时因为GPU的执行是SIMD的，所以函数<code>device_TestFunc</code>中的代码都被一条条同时执行：大家都先读<code>*value</code>的值，再加一，最后把值存回去。结果就导致这样的输出：</p>
 <pre><code>---- Test Origin ----
 Thread 0 entered with value 0
@@ -120,471 +70,469 @@ Thread 0 exited with value 1
 Thread 1 exited with value 1
 Thread 2 exited with value 1
 Thread 3 exited with value 1
-Thread 4 exited with value 1</code></pre>
+Thread 4 exited with value 1
+</code></pre>
 <p>可以看到，所有线程读到的旧值都是0，写入的新值都是1。</p>
 <h1 id="简单的尝试spinlock">简单的尝试：SpinLock</h1>
-<p>如果熟悉多线程编程的话，可能会直接上手写个<a
-href="https://en.wikipedia.org/wiki/Spinlock">自旋锁</a>：</p>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Initially, *lock == 1</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_SpinLock<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> <span class="dt">int32_t</span><span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Lock</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Work</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Unlock</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>如果熟悉多线程编程的话，可能会直接上手写个<a href="https://en.wikipedia.org/wiki/Spinlock">自旋锁</a>：</p>
+<pre><code class="language-c++"><span class="hljs-comment">// Initially, *lock == 1</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_SpinLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// Lock</span>
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-comment">// Work</span>
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	<span class="hljs-comment">// Unlock</span>
+	*lock = <span class="hljs-number">1</span>;
+}
+</code></pre>
 <p>这就是让各个线程轮流进入Work区域，如果还没轮到的话就在Lock区域的while循环处忙等待。</p>
 <p>这一实现在MIMD的多核CPU中是没问题的，但是在SIMD的GPU中是不可行的：因为一个wrap内的线程总是完完全全SIMD的，只要有一个线程还在Lock区域等待，这一整个wrap内的线程都不会继续往下执行。这就导致拿到了lock的那个线程也被迫等待在Lock区域，而无法进一步执行到Work区域，然后在Unlock区域释放lock。</p>
 <p>结果是会死锁：拿到了lock的A线程等待没有拿到lock的B线程继续向下执行，但是B线程也同时在等待A线程释放lock。</p>
-<p>这一问题在nvidia的论坛里也被问过：https://forums.developer.nvidia.com/t/try-to-use-lock-and-unlock-in-cuda/50761</p>
+<p>这一问题在nvidia的论坛里也被问过：<a href="https://forums.developer.nvidia.com/t/try-to-use-lock-and-unlock-in-cuda/50761">https://forums.developer.nvidia.com/t/try-to-use-lock-and-unlock-in-cuda/50761</a></p>
 <h1 id="针对gpu的修复方法ticketlock">针对GPU的修复方法：TicketLock</h1>
 <p>这一节的实现参见了《CUDA by Example》的A.2.4。</p>
 <p>注意到其实只有wrap内部是严格SIMD的，而wrap之间是可以不用在同一时间执行同一条指令的，换句话说在wrap之间是可以用上一节的自旋锁的。所以只要消除wrap内部的死锁就行了。</p>
-<p>解决思路的基础是wrap大小是固定的32。我们给wrap内的每个线程编号：0, 1,
-2, …, 31。然后用一个循环来给每个线程一次拿到lock的机会：</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_TicketLock<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> <span class="dt">int32_t</span><span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// For each thread in a wrap</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">32</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Check if it is this thread&#39;s turn</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>ti <span class="op">%</span> <span class="dv">32</span> <span class="op">!=</span> i<span class="op">)</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Lock</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">;</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Work</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Unlock</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>这个实现和<a
-href="https://en.wikipedia.org/wiki/Ticket_lock">TicketLock</a>差不多。</p>
-<p>它之所以不会死锁是因为没有拿到锁的线程们是会继续向下执行的，只是它们不会实际执行Lock-Work-UnLock这块代码，而是nop它们（就是虽然处理器的pc走过这些指令了，但并没有实际的decode,
-execute等过程），这就相当于发生一次控制分支。循环展开的话大概是这种感觉：</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span><span class="op">(</span>ti <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Thread 0 will enter here</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Other threads will nop these code but still execute them</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Lock</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Work</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Unlock</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span><span class="op">(</span>ti <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Thread 1 will enter here</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Other threads will nop these code but still execute them</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Lock</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">;</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Work</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Unlock</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">// ......</span></span></code></pre></div>
-<h1
-id="我设计的更加一般化的实现looplock">我设计的更加一般化的实现：LoopLock</h1>
+<p>解决思路的基础是wrap大小是固定的32。我们给wrap内的每个线程编号：0, 1, 2, ..., 31。然后用一个循环来给每个线程一次拿到lock的机会：</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_TicketLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// For each thread in a wrap</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">32</span>; i++) {
+		<span class="hljs-comment">// Check if it is this thread&#x27;s turn</span>
+		<span class="hljs-keyword">if</span> (ti % <span class="hljs-number">32</span> != i)
+			<span class="hljs-keyword">continue</span>;
+
+		<span class="hljs-comment">// Lock</span>
+		<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+			;
+		<span class="hljs-comment">// Work</span>
+		<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+		<span class="hljs-comment">// Unlock</span>
+		*lock = <span class="hljs-number">1</span>;
+	}
+}
+</code></pre>
+<p>这个实现和<a href="https://en.wikipedia.org/wiki/Ticket_lock">TicketLock</a>差不多。</p>
+<p>它之所以不会死锁是因为没有拿到锁的线程们是会继续向下执行的，只是它们不会实际执行Lock-Work-UnLock这块代码，而是nop它们（就是虽然处理器的pc走过这些指令了，但并没有实际的decode, execute等过程），这就相当于发生一次控制分支。循环展开的话大概是这种感觉：</p>
+<pre><code class="language-c++"><span class="hljs-keyword">if</span>(ti == <span class="hljs-number">0</span>) {
+	<span class="hljs-comment">// Thread 0 will enter here</span>
+	<span class="hljs-comment">// Other threads will nop these code but still execute them</span>
+
+	<span class="hljs-comment">// Lock</span>
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-comment">// Work</span>
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	<span class="hljs-comment">// Unlock</span>
+	*lock = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-keyword">if</span>(ti == <span class="hljs-number">1</span>) {
+	<span class="hljs-comment">// Thread 1 will enter here</span>
+	<span class="hljs-comment">// Other threads will nop these code but still execute them</span>
+
+	<span class="hljs-comment">// Lock</span>
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-comment">// Work</span>
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	<span class="hljs-comment">// Unlock</span>
+	*lock = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-comment">// ......</span>
+</code></pre>
+<h1 id="我设计的更加一般化的实现looplock">我设计的更加一般化的实现：LoopLock</h1>
 <p>LoopLock是我自己起的名字。</p>
 <p>上一节中的TicketLock已经足够解决问题。它的性能问题当然还是一个大问题，同样的代码得要执行32遍呢，不过这个问题除非是改成使用lock-free的实现（例如使用原子函数atomicAdd），不然是解决不了的，毕竟一个wrap内SIMD是目前GPU的特性。</p>
 <p>所以这一节我想解决的问题不是性能问题，而是消除掉上一节中的<code>32</code>这个数字，毕竟把wrap数量写死在代码里并不是太优雅的事情。</p>
 <p>注意到TicketLock解决问题的关键是避免了“拿到锁的线程原地等待没有拿到锁的线程，无法进入临界区”的情况。而要避免这一情况就是要引入控制分支，这一分支中，拿到锁的线程进入临界区，没有拿到锁的线程什么也不做。有了这个思路后，接下来的实现就呼之欲出了：</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_LoopLock<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> <span class="dt">int32_t</span><span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Loop for introducing control divergence</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span><span class="op">(</span><span class="kw">true</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Try - Lock</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Work</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Unlock</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>LoopLock的执行和TicketLock是一模一样的（有可能性能会差点吧，毕竟这里是dynamic
-loop，而TicketLoop是可以被循环展开的），只是写法上不同而已，这里我们就不用写死<code>32</code>这个数字了，各个线程的编号将由GPU对atomicExch的调度来决定。</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_LoopLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// Loop for introducing control divergence</span>
+	<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+		<span class="hljs-comment">// Try - Lock</span>
+		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) != <span class="hljs-number">0</span>) {
+			<span class="hljs-comment">// Work</span>
+			<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+			<span class="hljs-comment">// Unlock</span>
+			*lock = <span class="hljs-number">1</span>;
+			<span class="hljs-keyword">break</span>;
+		}
+	}
+}
+</code></pre>
+<p>LoopLock的执行和TicketLock是一模一样的（有可能性能会差点吧，毕竟这里是dynamic loop，而TicketLoop是可以被循环展开的），只是写法上不同而已，这里我们就不用写死<code>32</code>这个数字了，各个线程的编号将由GPU对atomicExch的调度来决定。</p>
 <h1 id="源代码">源代码</h1>
 <p>这一节没别的，就是代码。封装了的LoopLock的代码和实验用的代码。</p>
 <h2 id="封装了的looplock">封装了的LoopLock</h2>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LoopLock<span class="op">{</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">using</span> LockType <span class="op">=</span> <span class="dt">int32_t</span><span class="op">;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span> GPUVer <span class="op">{</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span><span class="op">:</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        GPUVer<span class="op">(</span>LockType<span class="op">*</span> d_lock<span class="op">):</span> d_lock<span class="op">(</span>d_lock<span class="op">)</span> <span class="op">{}</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T_Func<span class="op">&gt;</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        __device__ <span class="dt">void</span> WithLock<span class="op">(</span>T_Func func<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">do</span> <span class="op">{</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>atomicCAS<span class="op">(</span>d_lock<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                    func<span class="op">();</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span>d_lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span><span class="op">:</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        LockType<span class="op">*</span> d_lock<span class="op">;</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cudaError_t</span> Alloc<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">cudaError_t</span> et<span class="op">;</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_lock<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span>LockType<span class="op">)))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        LockType lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMemcpy<span class="op">(</span>d_lock<span class="op">,</span> <span class="op">&amp;</span>lock<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>LockType<span class="op">),</span> cudaMemcpyHostToDevice<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_gpuVer<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span>GPUVer<span class="op">)))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        GPUVer gpuVer<span class="op">(</span>d_lock<span class="op">);</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMemcpy<span class="op">(</span>d_gpuVer<span class="op">,</span> <span class="op">&amp;</span>gpuVer<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>GPUVer<span class="op">),</span> cudaMemcpyHostToDevice<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cudaError_t</span> Free<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>        <span class="dt">cudaError_t</span> et<span class="op">;</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaFree<span class="op">(</span>d_lock<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>        d_lock <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaFree<span class="op">(</span>d_gpuVer<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>        d_gpuVer <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 1: not locked</span></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 0: locked</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    LockType<span class="op">*</span> d_lock <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>    GPUVer<span class="op">*</span> GetGPUVer<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> d_gpuVer<span class="op">;</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>    GPUVer<span class="op">*</span> d_gpuVer <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<pre><code class="language-c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LoopLock</span>{
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-keyword">using</span> LockType = <span class="hljs-type">int32_t</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-keyword">class</span> <span class="hljs-title class_">GPUVer</span> {
+	<span class="hljs-keyword">public</span>:
+		<span class="hljs-built_in">GPUVer</span>(LockType* d_lock): <span class="hljs-built_in">d_lock</span>(d_lock) {}
+
+		<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_Func&gt;
+		__device__ <span class="hljs-type">void</span> <span class="hljs-title">WithLock</span><span class="hljs-params">(T_Func func)</span> </span>{
+			<span class="hljs-keyword">do</span> {
+				<span class="hljs-keyword">if</span> (<span class="hljs-built_in">atomicCAS</span>(d_lock, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>) == <span class="hljs-number">1</span>) {
+					<span class="hljs-built_in">func</span>();
+					*d_lock = <span class="hljs-number">1</span>;
+					<span class="hljs-keyword">break</span>;
+				}
+			} <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>);
+		}
+
+	<span class="hljs-keyword">private</span>:
+		LockType* d_lock;
+	};
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Alloc</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(LockType))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		LockType lock = <span class="hljs-number">1</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(LockType), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_gpuVer), <span class="hljs-built_in">sizeof</span>(GPUVer))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		<span class="hljs-function">GPUVer <span class="hljs-title">gpuVer</span><span class="hljs-params">(d_lock)</span></span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_gpuVer, &amp;gpuVer, <span class="hljs-built_in">sizeof</span>(GPUVer), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">return</span> et;
+	}
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Free</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_lock)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_lock = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_gpuVer)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_gpuVer = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">return</span> et;
+	}
+
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-comment">// 1: not locked</span>
+	<span class="hljs-comment">// 0: locked</span>
+	LockType* d_lock = <span class="hljs-literal">nullptr</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">GPUVer* <span class="hljs-title">GetGPUVer</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">return</span> d_gpuVer;
+	}
+
+<span class="hljs-keyword">private</span>:
+	GPUVer* d_gpuVer = <span class="hljs-literal">nullptr</span>;
+};
+</code></pre>
 <h2 id="实验用的全部代码">实验用的全部代码</h2>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cuda_runtime.h&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;device_launch_parameters.h&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> std<span class="op">;</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define CheckCuda</span><span class="op">(</span>x<span class="op">)</span><span class="pp"> </span><span class="op">{\</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="cf">if</span><span class="op">(</span>x<span class="pp"> </span><span class="op">!=</span><span class="pp"> </span>cudaSuccess<span class="op">)</span><span class="pp"> </span><span class="op">\</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span>cerr<span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="st">&quot;[CUDA Error][&quot;</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="ot">__FILE__</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="st">&quot; Line &quot;</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="ot">__LINE__</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="st">&quot;]</span><span class="sc">\n\t</span><span class="st">[&quot;</span><span class="pp"> </span><span class="op">\</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="pp">            </span><span class="op">&lt;&lt;</span><span class="pp"> </span>cudaGetErrorName<span class="op">(</span>x<span class="op">)</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="st">&quot;] &quot;</span><span class="pp"> </span><span class="op">\</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="pp">            </span><span class="op">&lt;&lt;</span><span class="pp"> </span>cudaGetErrorString<span class="op">(</span>x<span class="op">)</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span>endl<span class="op">;</span><span class="pp"> </span><span class="op">\</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LoopLock<span class="op">{</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">using</span> LockType <span class="op">=</span> <span class="dt">int32_t</span><span class="op">;</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span> GPUVer <span class="op">{</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span><span class="op">:</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        GPUVer<span class="op">(</span>LockType<span class="op">*</span> d_lock<span class="op">):</span> d_lock<span class="op">(</span>d_lock<span class="op">)</span> <span class="op">{}</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>        <span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T_Func<span class="op">&gt;</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        __device__ <span class="dt">void</span> WithLock<span class="op">(</span>T_Func func<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">do</span> <span class="op">{</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>atomicCAS<span class="op">(</span>d_lock<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>                    func<span class="op">();</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span>d_lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span><span class="op">:</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        LockType<span class="op">*</span> d_lock<span class="op">;</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cudaError_t</span> Alloc<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>        <span class="dt">cudaError_t</span> et<span class="op">;</span></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_lock<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span>LockType<span class="op">)))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>        LockType lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMemcpy<span class="op">(</span>d_lock<span class="op">,</span> <span class="op">&amp;</span>lock<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>LockType<span class="op">),</span> cudaMemcpyHostToDevice<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_gpuVer<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span>GPUVer<span class="op">)))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>        GPUVer gpuVer<span class="op">(</span>d_lock<span class="op">);</span></span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaMemcpy<span class="op">(</span>d_gpuVer<span class="op">,</span> <span class="op">&amp;</span>gpuVer<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>GPUVer<span class="op">),</span> cudaMemcpyHostToDevice<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cudaError_t</span> Free<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">cudaError_t</span> et<span class="op">;</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaFree<span class="op">(</span>d_lock<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>        d_lock <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>et <span class="op">=</span> cudaFree<span class="op">(</span>d_gpuVer<span class="op">))</span> <span class="op">!=</span> cudaSuccess<span class="op">)</span></span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>        d_gpuVer <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> et<span class="op">;</span></span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 1: not locked</span></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 0: locked</span></span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>    LockType<span class="op">*</span> d_lock <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>    GPUVer<span class="op">*</span> GetGPUVer<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> d_gpuVer<span class="op">;</span></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    GPUVer<span class="op">*</span> d_gpuVer <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>__device__ <span class="dt">void</span> device_TestFunc<span class="op">(</span><span class="dt">uint32_t</span> ti<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%i</span><span class="st"> entered with value </span><span class="sc">%i\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)</span>ti<span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)*</span>value<span class="op">);</span></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>value <span class="op">=</span> <span class="op">*</span>value <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%i</span><span class="st"> exited with value </span><span class="sc">%i\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)</span>ti<span class="op">,</span> <span class="op">(</span><span class="dt">int32_t</span><span class="op">)*</span>value<span class="op">);</span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="kw">constexpr</span> <span class="dt">size_t</span> N <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="co">//  Origin</span></span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_origin<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>    device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Test_origin<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span><span class="op">*</span> d_value<span class="op">;</span></span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_value<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">)));</span></span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> value <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_value<span class="op">,</span> <span class="op">&amp;</span>value<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>    kernel__Test_origin<span class="op">&lt;&lt;&lt;</span><span class="dv">1</span><span class="op">,</span> N<span class="op">&gt;&gt;&gt;(</span>N<span class="op">,</span> d_value<span class="op">);</span></span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaDeviceSynchronize<span class="op">());</span></span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_value<span class="op">));</span></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a><span class="co">//  LoopLock Class</span></span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_LoopLock_Class<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> LoopLock<span class="op">::</span>GPUVer<span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>    lock<span class="op">-&gt;</span>WithLock<span class="op">(</span></span>
-<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>        <span class="op">[&amp;]()</span> <span class="op">{</span></span>
-<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>            device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Test_LoopLock_Class<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>    LoopLock lock<span class="op">;</span></span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>lock<span class="op">.</span>Alloc<span class="op">());</span></span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span><span class="op">*</span> d_value<span class="op">;</span></span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_value<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">)));</span></span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> value <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_value<span class="op">,</span> <span class="op">&amp;</span>value<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a>    kernel__Test_LoopLock_Class<span class="op">&lt;&lt;&lt;</span><span class="dv">1</span><span class="op">,</span> N<span class="op">&gt;&gt;&gt;(</span>N<span class="op">,</span> d_value<span class="op">,</span> lock<span class="op">.</span>GetGPUVer<span class="op">());</span></span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaDeviceSynchronize<span class="op">());</span></span>
-<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_value<span class="op">));</span></span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>lock<span class="op">.</span>Free<span class="op">());</span></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a><span class="co">//  LoopLock</span></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_LoopLock<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> <span class="dt">int32_t</span><span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Loop for introducing control divergence</span></span>
-<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span><span class="op">(</span><span class="kw">true</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Try - Lock</span></span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Work</span></span>
-<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a>            device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Unlock</span></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Test_LoopLock<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32_t</span><span class="op">*</span> d_lock<span class="op">;</span></span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_lock<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int32_t</span><span class="op">)));</span></span>
-<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32_t</span> lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_lock<span class="op">,</span> <span class="op">&amp;</span>lock<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int32_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span><span class="op">*</span> d_value<span class="op">;</span></span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_value<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">)));</span></span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> value <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_value<span class="op">,</span> <span class="op">&amp;</span>value<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>    kernel__Test_LoopLock<span class="op">&lt;&lt;&lt;</span><span class="dv">1</span><span class="op">,</span> N<span class="op">&gt;&gt;&gt;(</span>N<span class="op">,</span> d_value<span class="op">,</span> d_lock<span class="op">);</span></span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaDeviceSynchronize<span class="op">());</span></span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_value<span class="op">));</span></span>
-<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_lock<span class="op">));</span></span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a><span class="co">//  TicketLock</span></span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_TicketLock<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> <span class="dt">int32_t</span><span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">32</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>ti <span class="op">%</span> <span class="dv">32</span> <span class="op">!=</span> i<span class="op">)</span></span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>            <span class="op">;</span></span>
-<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>        device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Test_TicketLock<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32_t</span><span class="op">*</span> d_lock<span class="op">;</span></span>
-<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_lock<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int32_t</span><span class="op">)));</span></span>
-<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32_t</span> lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_lock<span class="op">,</span> <span class="op">&amp;</span>lock<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int32_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span><span class="op">*</span> d_value<span class="op">;</span></span>
-<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_value<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">)));</span></span>
-<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> value <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_value<span class="op">,</span> <span class="op">&amp;</span>value<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>    kernel__Test_TicketLock<span class="op">&lt;&lt;&lt;</span><span class="dv">1</span><span class="op">,</span> N<span class="op">&gt;&gt;&gt;(</span>N<span class="op">,</span> d_value<span class="op">,</span> d_lock<span class="op">);</span></span>
-<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaDeviceSynchronize<span class="op">());</span></span>
-<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_value<span class="op">));</span></span>
-<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_lock<span class="op">));</span></span>
-<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a><span class="co">//  SpinLock</span></span>
-<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a><span class="co">// =====================================================</span></span>
-<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel__Test_SpinLock<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">size_t</span><span class="op">*</span> value<span class="op">,</span> <span class="dt">int32_t</span><span class="op">*</span> lock<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> ti <span class="op">=</span> blockDim<span class="op">.</span>x <span class="op">*</span> blockIdx<span class="op">.</span>x <span class="op">+</span> threadIdx<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ti <span class="op">&gt;=</span> n<span class="op">)</span></span>
-<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>atomicExch<span class="op">(</span>lock<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a>        <span class="op">;</span></span>
-<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a>    device_TestFunc<span class="op">(</span>ti<span class="op">,</span> value<span class="op">);</span></span>
-<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Test_SpinLock<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32_t</span><span class="op">*</span> d_lock<span class="op">;</span></span>
-<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_lock<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int32_t</span><span class="op">)));</span></span>
-<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32_t</span> lock <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_lock<span class="op">,</span> <span class="op">&amp;</span>lock<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int32_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span><span class="op">*</span> d_value<span class="op">;</span></span>
-<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMalloc<span class="op">(</span><span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="dt">void</span><span class="op">**&gt;(&amp;</span>d_value<span class="op">),</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">)));</span></span>
-<span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> value <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaMemcpy<span class="op">(</span>d_value<span class="op">,</span> <span class="op">&amp;</span>value<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">size_t</span><span class="op">),</span> cudaMemcpyHostToDevice<span class="op">));</span></span>
-<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a>    kernel__Test_SpinLock<span class="op">&lt;&lt;&lt;</span><span class="dv">1</span><span class="op">,</span> N<span class="op">&gt;&gt;&gt;(</span>N<span class="op">,</span> d_value<span class="op">,</span> d_lock<span class="op">);</span></span>
-<span id="cb9-258"><a href="#cb9-258" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaDeviceSynchronize<span class="op">());</span></span>
-<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_value<span class="op">));</span></span>
-<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a>    CheckCuda<span class="op">(</span>cudaFree<span class="op">(</span>d_lock<span class="op">));</span></span>
-<span id="cb9-262"><a href="#cb9-262" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;---- Test Origin ----</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-270"><a href="#cb9-270" aria-hidden="true" tabindex="-1"></a>    Test_origin<span class="op">();</span></span>
-<span id="cb9-271"><a href="#cb9-271" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;---- Test LoopLock Class ----</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-274"><a href="#cb9-274" aria-hidden="true" tabindex="-1"></a>    Test_LoopLock_Class<span class="op">();</span></span>
-<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;---- Test LoopLock ----</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a>    Test_LoopLock<span class="op">();</span></span>
-<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;---- Test TicketLock ----</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-282"><a href="#cb9-282" aria-hidden="true" tabindex="-1"></a>    Test_TicketLock<span class="op">();</span></span>
-<span id="cb9-283"><a href="#cb9-283" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-284"><a href="#cb9-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-285"><a href="#cb9-285" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;---- Test SpinLock ----</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-286"><a href="#cb9-286" aria-hidden="true" tabindex="-1"></a>    Test_SpinLock<span class="op">();</span></span>
-<span id="cb9-287"><a href="#cb9-287" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb9-288"><a href="#cb9-288" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-289"><a href="#cb9-289" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</body>
-</html>
+<pre><code class="language-c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cuda_runtime.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;device_launch_parameters.h&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> CheckCuda(x) {\
+	<span class="hljs-keyword">if</span>(x != cudaSuccess) \
+		cerr &lt;&lt; <span class="hljs-string">&quot;[CUDA Error][&quot;</span> &lt;&lt; __FILE__ &lt;&lt; <span class="hljs-string">&quot; Line &quot;</span> &lt;&lt; __LINE__ &lt;&lt; <span class="hljs-string">&quot;]\n\t[&quot;</span> \
+			&lt;&lt; cudaGetErrorName(x) &lt;&lt; <span class="hljs-string">&quot;] &quot;</span> \
+			&lt;&lt; cudaGetErrorString(x) &lt;&lt; endl; \
+}</span>
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LoopLock</span>{
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-keyword">using</span> LockType = <span class="hljs-type">int32_t</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-keyword">class</span> <span class="hljs-title class_">GPUVer</span> {
+	<span class="hljs-keyword">public</span>:
+		<span class="hljs-built_in">GPUVer</span>(LockType* d_lock): <span class="hljs-built_in">d_lock</span>(d_lock) {}
+
+		<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_Func&gt;
+		__device__ <span class="hljs-type">void</span> <span class="hljs-title">WithLock</span><span class="hljs-params">(T_Func func)</span> </span>{
+			<span class="hljs-keyword">do</span> {
+				<span class="hljs-keyword">if</span> (<span class="hljs-built_in">atomicCAS</span>(d_lock, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>) == <span class="hljs-number">1</span>) {
+					<span class="hljs-built_in">func</span>();
+					*d_lock = <span class="hljs-number">1</span>;
+					<span class="hljs-keyword">break</span>;
+				}
+			} <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>);
+		}
+
+	<span class="hljs-keyword">private</span>:
+		LockType* d_lock;
+	};
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Alloc</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(LockType))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		LockType lock = <span class="hljs-number">1</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(LockType), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_gpuVer), <span class="hljs-built_in">sizeof</span>(GPUVer))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		<span class="hljs-function">GPUVer <span class="hljs-title">gpuVer</span><span class="hljs-params">(d_lock)</span></span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_gpuVer, &amp;gpuVer, <span class="hljs-built_in">sizeof</span>(GPUVer), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">return</span> et;
+	}
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Free</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_lock)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_lock = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_gpuVer)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_gpuVer = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">return</span> et;
+	}
+
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-comment">// 1: not locked</span>
+	<span class="hljs-comment">// 0: locked</span>
+	LockType* d_lock = <span class="hljs-literal">nullptr</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">GPUVer* <span class="hljs-title">GetGPUVer</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">return</span> d_gpuVer;
+	}
+
+<span class="hljs-keyword">private</span>:
+	GPUVer* d_gpuVer = <span class="hljs-literal">nullptr</span>;
+};
+
+
+<span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">device_TestFunc</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ti, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i entered with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+	*value = *value + <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i exited with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+}
+<span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> N = <span class="hljs-number">5</span>;
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	Origin</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_origin</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_origin</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_origin&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+}
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	LoopLock Class</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_LoopLock_Class</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, LoopLock::GPUVer* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	lock-&gt;<span class="hljs-built_in">WithLock</span>(
+		[&amp;]() {
+			<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+		}
+	);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_LoopLock_Class</span><span class="hljs-params">()</span> </span>{
+	LoopLock lock;
+	<span class="hljs-built_in">CheckCuda</span>(lock.<span class="hljs-built_in">Alloc</span>());
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_LoopLock_Class&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, lock.<span class="hljs-built_in">GetGPUVer</span>());
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(lock.<span class="hljs-built_in">Free</span>());
+}
+
+
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	LoopLock</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_LoopLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// Loop for introducing control divergence</span>
+	<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+		<span class="hljs-comment">// Try - Lock</span>
+		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) != <span class="hljs-number">0</span>) {
+			<span class="hljs-comment">// Work</span>
+			<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+			<span class="hljs-comment">// Unlock</span>
+			*lock = <span class="hljs-number">1</span>;
+			<span class="hljs-keyword">break</span>;
+		}
+	}
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_LoopLock</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">int32_t</span>* d_lock;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>)));
+	<span class="hljs-type">int32_t</span> lock = <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>), cudaMemcpyHostToDevice));
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_LoopLock&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, d_lock);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_lock));
+}
+
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	TicketLock</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_TicketLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">32</span>; i++) {
+		<span class="hljs-keyword">if</span> (ti % <span class="hljs-number">32</span> != i)
+			<span class="hljs-keyword">continue</span>;
+
+		<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+			;
+		<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+		*lock = <span class="hljs-number">1</span>;
+	}
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_TicketLock</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">int32_t</span>* d_lock;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>)));
+	<span class="hljs-type">int32_t</span> lock = <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>), cudaMemcpyHostToDevice));
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_TicketLock&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, d_lock);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_lock));
+}
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	SpinLock</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_SpinLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	*lock = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_SpinLock</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">int32_t</span>* d_lock;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>)));
+	<span class="hljs-type">int32_t</span> lock = <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>), cudaMemcpyHostToDevice));
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_SpinLock&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, d_lock);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_lock));
+}
+
+
+
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test Origin ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_origin</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test LoopLock Class ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_LoopLock_Class</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test LoopLock ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_LoopLock</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test TicketLock ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_TicketLock</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test SpinLock ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_SpinLock</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+
+        
+        
+    </body>
+    </html>
