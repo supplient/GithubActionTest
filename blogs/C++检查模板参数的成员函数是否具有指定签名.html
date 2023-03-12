@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>C&plus;&plus;&#x68c0;&#x67e5;&#x6a21;&#x677f;&#x53c2;&#x6570;&#x7684;&#x6210;&#x5458;&#x51fd;&#x6570;&#x662f;&#x5426;&#x5177;&#x6709;&#x6307;&#x5b9a;&#x7b7e;&#x540d;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <p>#! <a href="https://zhuanlan.zhihu.com/p/404503798">https://zhuanlan.zhihu.com/p/404503798</a></p>
+<h1 id="c检查模板参数的成员函数是否具有指定签名">C++检查模板参数的成员函数是否具有指定签名</h1>
+<p>如题，仅为个人备忘。该静态检查的效果并不好，和直接依靠编译器进行检查区别不大。</p>
+<h1 id="problem">Problem</h1>
+<p>我们有伪函数类HashFunc，它有一个成员函数operator()：</p>
+<pre><code class="language-c++">
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HashFunc</span>
+{
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; k)</span> </span>{
+		<span class="hljs-keyword">return</span> k % <span class="hljs-number">100</span>;
+	}
+};
+
+</code></pre>
+<p>然后我们还有一个类HashSet，它有一个模板参数：</p>
+<pre><code class="language-c++">
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_HashFunc&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HashSet</span>
+{
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> val)</span> </span>{
+		<span class="hljs-type">size_t</span> hashValue = <span class="hljs-built_in">T_HashFunc</span>()(val);
+		<span class="hljs-comment">// ...</span>
+	}
+	<span class="hljs-comment">// ...</span>
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+	HashSet&lt;HashFunc&gt; s;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+</code></pre>
+<p>最后我们想要做的是能够在编译阶段就检查T_HashFunc是否是一个我们需要的函数类：</p>
+<ul>
+<li>有默认构造函数</li>
+<li>有一个括号重载函数operator()
+<ul>
+<li>这个重载函数的返回值是size_t，参数是const int&amp;</li>
+</ul>
+</li>
+</ul>
+<h1 id="solution">Solution</h1>
+<h2 id="函数签名检查">函数签名检查</h2>
+<p>一步步来，先看怎么检查函数签名。</p>
+<p>在c++17中引入了type traits：<a href="https://en.cppreference.com/w/cpp/types/is_invocable">is_invocable</a>，可以用它来检查一个函数的签名：</p>
+<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-type">bool</span>&amp; k)</span> </span>{}
+
+<span class="hljs-built_in">static_assert</span>(is_invocable_r_v&lt;<span class="hljs-type">int</span>, <span class="hljs-keyword">decltype</span>(&amp;func), <span class="hljs-type">bool</span>&amp;&gt;, <span class="hljs-string">&quot;Error&quot;</span>);
+</code></pre>
+<p>上面代码中，func是一个函数名，&amp;func取其函数指针，再用<a href="https://en.cppreference.com/w/cpp/language/decltype">decltype(&amp;func)</a>取函数签名，最后使用is_invocable检查该签名。具体is_invocable的参数列表请见上面的连接。</p>
+<h2 id="成员函数指针转普通函数指针">成员函数指针转普通函数指针</h2>
+<p>但如果我们直接用上面的方法检查T_HashFunc::operator()的话是不行的，因为它是个成员函数指针，而非普通的函数指针。</p>
+<p>为了实现这一目的，我参照了：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/56709483/removing-class-pointer-from-member-function-pointer-type">https://stackoverflow.com/questions/56709483/removing-class-pointer-from-member-function-pointer-type</a></li>
+<li><a href="https://stackoverflow.com/questions/22213523/c11-14-how-to-remove-a-pointer-to-member-from-a-type">https://stackoverflow.com/questions/22213523/c11-14-how-to-remove-a-pointer-to-member-from-a-type</a></li>
+</ul>
+<p>就是一个利用template specialization的type traits技巧：</p>
+<pre><code class="language-c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span>&gt;
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">remove_member_pointer</span> {};
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">U</span>&gt;
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">remove_member_pointer</span>&lt;U T::*&gt; {
+	<span class="hljs-keyword">using</span> type = U;
+};
+
+<span class="hljs-keyword">using</span> normalFuncPointer = remove_member_pointer&lt;<span class="hljs-keyword">decltype</span>(&amp;HashFunc::<span class="hljs-built_in">operator</span>())&gt;::type;
+
+</code></pre>
+<p>这里using和typedef是类似的东西，是c++11的新语法，可以参阅这里：<a href="https://en.cppreference.com/w/cpp/language/type_alias%E3%80%82">https://en.cppreference.com/w/cpp/language/type_alias。</a></p>
+<p>对上面代码里的normalFuncPointer使用is_invocable检查函数签名即可。</p>
+<h2 id="最终实现">最终实现</h2>
+<pre><code class="language-c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_DataType, <span class="hljs-keyword">typename</span> T_HashFunc&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HashSet</span>
+{
+	<span class="hljs-built_in">static_assert</span>(
+		<span class="hljs-comment">// Check if is a class, to avoid namespace</span>
+		std::is_class_v&lt;T_HashFunc&gt; 
+		<span class="hljs-comment">// Check if constructible</span>
+		&amp;&amp; std::is_constructible_v&lt;T_HashFunc&gt;
+		<span class="hljs-comment">// Check operator()&#x27;s signature</span>
+		&amp;&amp; std::is_invocable_r_v&lt;<span class="hljs-type">size_t</span>, remove_member_pointer&lt;<span class="hljs-keyword">decltype</span>(&amp;T_HashFunc::<span class="hljs-built_in">operator</span>())&gt;::type, <span class="hljs-type">const</span> T_DataType&amp;&gt;
+		<span class="hljs-comment">// Error message</span>
+		, <span class="hljs-string">&quot;T_HashFunc must have an overloaded operator() with signature: size_t(const T_DataType&amp;)&quot;</span>);
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HashFunc</span>
+{
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; k)</span> </span>{
+		<span class="hljs-keyword">return</span> k % <span class="hljs-number">100</span>;
+	}
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+	HashSet&lt;<span class="hljs-type">int</span>, HashFunc&gt; s;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h1 id="further-consideration">Further Consideration</h1>
+<ul>
+<li>哪怕operator()的返回值不是size_t，而是bool，也照样能过编译，似乎is_invocable并没有那么严格。</li>
+<li>is_invocable也不会严格区分const int&amp;和int。</li>
+</ul>
+
+        
+        
+    </body>
+    </html>

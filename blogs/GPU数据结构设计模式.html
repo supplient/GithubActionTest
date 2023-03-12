@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>&#x4e00;&#x3001;&#x677e;&#x6563;&#x7684;&#x6570;&#x636e;&#x4e0e;&#x63a5;&#x53e3;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <p>本文仅仅只是自己在实践中总结的经验。GPGPU编程有很多选择，目前比较流行的有CUDA和OpenCL，本文选择CUDA作为例子。</p>
+<h1 id="一松散的数据与接口">一、松散的数据与接口</h1>
+<h2 id="1-单核的情况">1. 单核的情况</h2>
+<p>通常来说，我们设计一个类的时候是将方法和数据打包在一起，这也是OOP的基本思想。让我们从一个简单的CPU端的动态增长的栈入手：</p>
+<pre><code class="language-c++">
+<span class="hljs-comment">// StackInterface&lt;T&gt; is ignored</span>
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyStack</span>: <span class="hljs-keyword">public</span> StackInterface&lt;T&gt; {
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-built_in">MyStack</span>() = <span class="hljs-keyword">default</span>;
+	<span class="hljs-built_in">MyStack</span>(<span class="hljs-type">const</span> MyStack&amp;) = <span class="hljs-keyword">delete</span>;
+	<span class="hljs-built_in">MyStack</span>(<span class="hljs-type">const</span> MyStack&amp;&amp; k) {
+		<span class="hljs-keyword">if</span> (m_data)
+			<span class="hljs-keyword">delete</span>[] m_data;
+
+		m_data = k.m_data;
+		m_size = k.m_size;
+
+		k.m_data = <span class="hljs-literal">nullptr</span>;
+	}
+	~<span class="hljs-built_in">MyStack</span>() {
+		<span class="hljs-keyword">if</span> (m_data)
+			<span class="hljs-keyword">delete</span>[] m_data;
+	}
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Push</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; ele)</span> <span class="hljs-keyword">override</span> </span>{
+		<span class="hljs-built_in">EnsureCapacity</span>(m_size + <span class="hljs-number">1</span>);
+		m_data[m_size] = ele;
+		m_size++;
+	}
+
+	<span class="hljs-function">T <span class="hljs-title">Pop</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>{
+		<span class="hljs-built_in">assert</span>(m_size &gt; <span class="hljs-number">0</span>);
+		<span class="hljs-type">const</span> T&amp; ele = m_data[m_size - <span class="hljs-number">1</span>];
+		m_size--;
+		<span class="hljs-keyword">return</span> <span class="hljs-built_in">move</span>(ele);
+	}
+
+	<span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">GetSize</span><span class="hljs-params">()</span><span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_size; }
+
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EnsureCapacity</span><span class="hljs-params">(<span class="hljs-type">size_t</span> newCap)</span> </span>{
+		<span class="hljs-keyword">if</span> (newCap &lt;= m_capacity)
+			<span class="hljs-keyword">return</span>;
+		newCap = m_capacity + <span class="hljs-built_in">max</span>(newCap - m_capacity, m_capacity);
+		T* newData = <span class="hljs-keyword">new</span> T[newCap];
+		<span class="hljs-keyword">if</span> (m_data) {
+			<span class="hljs-built_in">memcpy</span>(newData, m_data, m_size * <span class="hljs-built_in">sizeof</span>(T));
+			<span class="hljs-keyword">delete</span>[] m_data;
+		}
+		m_data = newData;
+		m_capacity = newCap;
+	}
+
+<span class="hljs-keyword">private</span>:
+	T* m_data = <span class="hljs-literal">nullptr</span>;
+	<span class="hljs-type">size_t</span> m_size = <span class="hljs-number">0</span>;
+	<span class="hljs-type">size_t</span> m_capacity = <span class="hljs-number">0</span>;
+};
+
+</code></pre>
+<p>它支持Push和Pop这两个常规操作，数据放在CPU上。</p>
+<p>那么如果我们希望有一个GPU端的栈呢？可能，我们想在GPU端操作它，所以我们希望它的数据能够放在GPU端，然后接口也暴露在GPU端。就是说，我们可能想写这样的代码：</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__UseStack</span><span class="hljs-params">()</span> </span>{
+	Stack s;
+	s.<span class="hljs-built_in">Push</span>(<span class="hljs-number">3</span>);
+	s.<span class="hljs-built_in">Push</span>(<span class="hljs-number">4</span>);
+	s.<span class="hljs-built_in">Pop</span>();
+}
+</code></pre>
+<p>这可以非常简单，注意到Stack是在一个<code>__global__</code>函数中被初始化的，这意味着它包括构造函数、析构函数在内的方法都可以是device function。并且目前CUDA也支持dynamic global memory allocation了，所以简单地写一个：</p>
+<pre><code class="language-c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyStack</span> {
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">__device__ <span class="hljs-title">MyStack</span><span class="hljs-params">()</span> </span>= <span class="hljs-keyword">default</span>;
+	<span class="hljs-function">__device__ <span class="hljs-title">MyStack</span><span class="hljs-params">(<span class="hljs-type">const</span> MyStack&amp;)</span> </span>= <span class="hljs-keyword">delete</span>;
+	<span class="hljs-function">__device__ <span class="hljs-title">MyStack</span><span class="hljs-params">(<span class="hljs-type">const</span> MyStack&amp;&amp; k)</span> </span>{
+		<span class="hljs-keyword">if</span> (m_data)
+			<span class="hljs-keyword">delete</span>[] m_data;
+
+		m_data = k.m_data;
+		m_size = k.m_size;
+
+		k.m_data = <span class="hljs-literal">nullptr</span>;
+	}
+	__device__ ~<span class="hljs-built_in">MyStack</span>() {
+		<span class="hljs-keyword">if</span> (m_data)
+			<span class="hljs-built_in">free</span>(m_data);
+	}
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">Push</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; ele)</span> </span>{
+		<span class="hljs-built_in">EnsureCapacity</span>(m_size + <span class="hljs-number">1</span>);
+		m_data[m_size] = ele;
+		m_size++;
+	}
+
+	<span class="hljs-function">__device__ T <span class="hljs-title">Pop</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-built_in">assert</span>(m_size &gt; <span class="hljs-number">0</span>);
+		<span class="hljs-type">const</span> T&amp; ele = m_data[m_size - <span class="hljs-number">1</span>];
+		m_size--;
+		<span class="hljs-keyword">return</span> <span class="hljs-built_in">move</span>(ele);
+	}
+
+	<span class="hljs-function">__device__ <span class="hljs-type">size_t</span> <span class="hljs-title">GetSize</span><span class="hljs-params">()</span><span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_size; }
+
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">EnsureCapacity</span><span class="hljs-params">(<span class="hljs-type">size_t</span> newCap)</span> </span>{
+		<span class="hljs-keyword">if</span> (newCap &lt;= m_capacity)
+			<span class="hljs-keyword">return</span>;
+		newCap = m_capacity + <span class="hljs-built_in">max</span>(newCap - m_capacity, m_capacity);
+		T* newData = <span class="hljs-built_in">static_cast</span>&lt;T*&gt;(<span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">sizeof</span>(T) * newCap));
+		<span class="hljs-keyword">if</span> (m_data) {
+			<span class="hljs-built_in">memcpy</span>(newData, m_data, m_size * <span class="hljs-built_in">sizeof</span>(T));
+			<span class="hljs-built_in">free</span>(m_data);
+		}
+		m_data = newData;
+		m_capacity = newCap;
+	}
+
+<span class="hljs-keyword">private</span>:
+	T* m_data = <span class="hljs-literal">nullptr</span>;
+	<span class="hljs-type">size_t</span> m_size = <span class="hljs-number">0</span>;
+	<span class="hljs-type">size_t</span> m_capacity = <span class="hljs-number">0</span>;
+};
+
+</code></pre>
+<p>改动基本就只有追加了<code>__device__</code> annotation而已。</p>
+<h2 id="2-需要gpu多线程共享的情况">2. 需要GPU多线程共享的情况</h2>
+<p>上述两个Stack的实现之所以这么方便，是因为它们的数据和所有接口都是统一在一个地方的：第一个Stack是在CPU端，第二个Stack是在GPU端的一个线程内。</p>
+<p>我们可能会希望能够在GPU的多个线程之间共享这个栈，这一方面会带来同步问题，不过那不是这篇文章的重点，所以先忽略它，另一方面是内存管理的问题。虽然device malloc分配的global memory在多个线程之间是共享的，但这个memory的指针却是各个线程的local variable，更何况我们希望只有一个被共享的栈，而不是每个线程都分配一个。</p>
+<p>所以一个直接的想法是让launch kernel之前，从CPU端分配一个驻留在GPU端的栈。使用起来大概是这种感觉：</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Init</span><span class="hljs-params">(Stack* s)</span> </span>{
+	<span class="hljs-comment">// placement new</span>
+	s = <span class="hljs-built_in">new</span>(s) <span class="hljs-built_in">Stack</span>();
+}
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test</span><span class="hljs-params">(Stack* s)</span> </span>{
+	s.<span class="hljs-built_in">push</span>(threadIdx.x);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test</span><span class="hljs-params">()</span> </span>{
+	Stack* d_s;
+	<span class="hljs-built_in">cudaMalloc</span>(&amp;d_s, <span class="hljs-built_in">sizeof</span>(Stack));
+	kernel__Init&lt;&lt;&lt;<span class="hljs-number">1</span>,<span class="hljs-number">1</span>&gt;&gt;&gt;(d_s);
+	kernel__Test&lt;&lt;&lt;<span class="hljs-number">1</span>,<span class="hljs-number">4</span>&gt;&gt;&gt;(d_s);
+}
+</code></pre>
+<p>值得注意的地方是我们需要在使用之前先launch一个用于调用构造函数的kernel(<code>kernel__init</code>)，毕竟我们没有使用方便好用的new operator来分配内存，构造函数是不会被自动调用的。</p>
+<p>这样可以解决问题，让多个线程共享一个栈，但是毕竟每次都要手动launch kernel__init实在是麻烦，所以我们稍微给它封装一下：</p>
+<pre><code class="language-c++"><span class="hljs-keyword">namespace</span> kernel {
+	<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... T_Args&gt;
+	__global__ <span class="hljs-type">void</span> <span class="hljs-title">ConstructObject</span><span class="hljs-params">(T* obj, T_Args... args)</span> </span>{
+		obj = <span class="hljs-built_in">new</span>(obj) <span class="hljs-built_in">T</span>(args...);
+	}
+	<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+	__global__ <span class="hljs-type">void</span> <span class="hljs-title">DestructObject</span><span class="hljs-params">(T* obj)</span> </span>{
+		obj-&gt;~<span class="hljs-built_in">T</span>();
+	}
+}
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HostWrap</span> {
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-built_in">HostWrap</span>() {
+		<span class="hljs-built_in">cudaMalloc</span>(&amp;m_d_obj, <span class="hljs-built_in">sizeof</span>(T));
+		kernel::ConstructObject&lt;T&gt; &lt;&lt; &lt;<span class="hljs-number">1</span>, <span class="hljs-number">1</span> &gt;&gt; &gt; (m_d_obj);
+	}
+	~<span class="hljs-built_in">HostWrap</span>() {
+		kernel::DestructObject&lt;T&gt; &lt;&lt; &lt;<span class="hljs-number">1</span>, <span class="hljs-number">1</span> &gt;&gt; &gt; (m_d_obj);
+		<span class="hljs-built_in">cudaFree</span>(m_d_obj);
+	}
+	
+	<span class="hljs-keyword">operator</span> T*()<span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> m_d_obj; }
+
+<span class="hljs-keyword">private</span>:
+	T* m_d_obj;
+};
+
+<span class="hljs-keyword">namespace</span> kernel {
+	<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_Stack&gt;
+	__global__ <span class="hljs-type">void</span> <span class="hljs-title">Test</span><span class="hljs-params">(T_Stack* s, <span class="hljs-type">size_t</span> n)</span> </span>{
+		<span class="hljs-type">size_t</span> ti = threadIdx.x;
+		
+		<span class="hljs-comment">// Push</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+			<span class="hljs-keyword">if</span> (ti == i)
+				s-&gt;<span class="hljs-built_in">Push</span>(ti);
+			__syncthreads();
+		}
+
+		<span class="hljs-comment">// Pop</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+			<span class="hljs-keyword">if</span> (ti == i)
+				<span class="hljs-built_in">assert</span>(s-&gt;<span class="hljs-built_in">Pop</span>() == n - <span class="hljs-number">1</span> - i);
+			__syncthreads();
+		}
+	}
+}
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span> {
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">()</span> </span>{
+		HostWrap&lt;T&gt; stackWrap;
+		kernel::Test&lt;T&gt; &lt;&lt; &lt;<span class="hljs-number">1</span>, <span class="hljs-number">4</span> &gt;&gt; &gt; (stackWrap, <span class="hljs-number">4</span>);
+		<span class="hljs-built_in">cudaDeviceSynchronize</span>();
+	}
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+	Test&lt;MyStack&lt;<span class="hljs-type">int</span>&gt;&gt;()();
+	<span class="hljs-built_in">cudaDeviceSynchronize</span>();
+
+	<span class="hljs-built_in">cudaDeviceReset</span>();
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+</code></pre>
+<p>封装的代码里还包含了调用析构函数的代码，这也是显然的，毕竟<code>cudaFree</code>并不会自动调用析构函数。</p>
+<h2 id="3-不使用device-malloc的情况">3. 不使用device malloc的情况</h2>
+<p>现在我们需要非常大的栈，大到可能会有1GB那么大的程度。</p>
+
+        
+        
+    </body>
+    </html>

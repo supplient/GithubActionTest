@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>CUDA&#x4e2d;&#x539f;&#x5b50;&#x9501;&#x7684;&#x5b9e;&#x73b0;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <p>#! <a href="https://zhuanlan.zhihu.com/p/418985780">https://zhuanlan.zhihu.com/p/418985780</a></p>
+<h1 id="cuda中原子锁的实现">CUDA中原子锁的实现</h1>
+<h1 id="问题一个需要锁的场景">问题：一个需要锁的场景</h1>
+<p>假设我有这么一个函数需要若干线程并行执行（也就是临界区critical section）：</p>
+<pre><code class="language-c++"><span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">device_TestFunc</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ti, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i entered with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+	*value = *value + <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i exited with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+}
+</code></pre>
+<p>就是自增value指向的值，其实最好是直接使用atomicInc或者atomicAdd这些原子操作函数的，不过我们这边为了演示，还是自己手动实现一个原子锁。</p>
+<p>如果不上锁的话，kernel就大概是这么写（host端的代码最后再一起放出来）：</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_origin</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+}
+</code></pre>
+<p>此时因为GPU的执行是SIMD的，所以函数<code>device_TestFunc</code>中的代码都被一条条同时执行：大家都先读<code>*value</code>的值，再加一，最后把值存回去。结果就导致这样的输出：</p>
+<pre><code>---- Test Origin ----
+Thread 0 entered with value 0
+Thread 1 entered with value 0
+Thread 2 entered with value 0
+Thread 3 entered with value 0
+Thread 4 entered with value 0
+Thread 0 exited with value 1
+Thread 1 exited with value 1
+Thread 2 exited with value 1
+Thread 3 exited with value 1
+Thread 4 exited with value 1
+</code></pre>
+<p>可以看到，所有线程读到的旧值都是0，写入的新值都是1。</p>
+<h1 id="简单的尝试spinlock">简单的尝试：SpinLock</h1>
+<p>如果熟悉多线程编程的话，可能会直接上手写个<a href="https://en.wikipedia.org/wiki/Spinlock">自旋锁</a>：</p>
+<pre><code class="language-c++"><span class="hljs-comment">// Initially, *lock == 1</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_SpinLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// Lock</span>
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-comment">// Work</span>
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	<span class="hljs-comment">// Unlock</span>
+	*lock = <span class="hljs-number">1</span>;
+}
+</code></pre>
+<p>这就是让各个线程轮流进入Work区域，如果还没轮到的话就在Lock区域的while循环处忙等待。</p>
+<p>这一实现在MIMD的多核CPU中是没问题的，但是在SIMD的GPU中是不可行的：因为一个wrap内的线程总是完完全全SIMD的，只要有一个线程还在Lock区域等待，这一整个wrap内的线程都不会继续往下执行。这就导致拿到了lock的那个线程也被迫等待在Lock区域，而无法进一步执行到Work区域，然后在Unlock区域释放lock。</p>
+<p>结果是会死锁：拿到了lock的A线程等待没有拿到lock的B线程继续向下执行，但是B线程也同时在等待A线程释放lock。</p>
+<p>这一问题在nvidia的论坛里也被问过：<a href="https://forums.developer.nvidia.com/t/try-to-use-lock-and-unlock-in-cuda/50761">https://forums.developer.nvidia.com/t/try-to-use-lock-and-unlock-in-cuda/50761</a></p>
+<h1 id="针对gpu的修复方法ticketlock">针对GPU的修复方法：TicketLock</h1>
+<p>这一节的实现参见了《CUDA by Example》的A.2.4。</p>
+<p>注意到其实只有wrap内部是严格SIMD的，而wrap之间是可以不用在同一时间执行同一条指令的，换句话说在wrap之间是可以用上一节的自旋锁的。所以只要消除wrap内部的死锁就行了。</p>
+<p>解决思路的基础是wrap大小是固定的32。我们给wrap内的每个线程编号：0, 1, 2, ..., 31。然后用一个循环来给每个线程一次拿到lock的机会：</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_TicketLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// For each thread in a wrap</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">32</span>; i++) {
+		<span class="hljs-comment">// Check if it is this thread&#x27;s turn</span>
+		<span class="hljs-keyword">if</span> (ti % <span class="hljs-number">32</span> != i)
+			<span class="hljs-keyword">continue</span>;
+
+		<span class="hljs-comment">// Lock</span>
+		<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+			;
+		<span class="hljs-comment">// Work</span>
+		<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+		<span class="hljs-comment">// Unlock</span>
+		*lock = <span class="hljs-number">1</span>;
+	}
+}
+</code></pre>
+<p>这个实现和<a href="https://en.wikipedia.org/wiki/Ticket_lock">TicketLock</a>差不多。</p>
+<p>它之所以不会死锁是因为没有拿到锁的线程们是会继续向下执行的，只是它们不会实际执行Lock-Work-UnLock这块代码，而是nop它们（就是虽然处理器的pc走过这些指令了，但并没有实际的decode, execute等过程），这就相当于发生一次控制分支。循环展开的话大概是这种感觉：</p>
+<pre><code class="language-c++"><span class="hljs-keyword">if</span>(ti == <span class="hljs-number">0</span>) {
+	<span class="hljs-comment">// Thread 0 will enter here</span>
+	<span class="hljs-comment">// Other threads will nop these code but still execute them</span>
+
+	<span class="hljs-comment">// Lock</span>
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-comment">// Work</span>
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	<span class="hljs-comment">// Unlock</span>
+	*lock = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-keyword">if</span>(ti == <span class="hljs-number">1</span>) {
+	<span class="hljs-comment">// Thread 1 will enter here</span>
+	<span class="hljs-comment">// Other threads will nop these code but still execute them</span>
+
+	<span class="hljs-comment">// Lock</span>
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-comment">// Work</span>
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	<span class="hljs-comment">// Unlock</span>
+	*lock = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-comment">// ......</span>
+</code></pre>
+<h1 id="我设计的更加一般化的实现looplock">我设计的更加一般化的实现：LoopLock</h1>
+<p>LoopLock是我自己起的名字。</p>
+<p>上一节中的TicketLock已经足够解决问题。它的性能问题当然还是一个大问题，同样的代码得要执行32遍呢，不过这个问题除非是改成使用lock-free的实现（例如使用原子函数atomicAdd），不然是解决不了的，毕竟一个wrap内SIMD是目前GPU的特性。</p>
+<p>所以这一节我想解决的问题不是性能问题，而是消除掉上一节中的<code>32</code>这个数字，毕竟把wrap数量写死在代码里并不是太优雅的事情。</p>
+<p>注意到TicketLock解决问题的关键是避免了“拿到锁的线程原地等待没有拿到锁的线程，无法进入临界区”的情况。而要避免这一情况就是要引入控制分支，这一分支中，拿到锁的线程进入临界区，没有拿到锁的线程什么也不做。有了这个思路后，接下来的实现就呼之欲出了：</p>
+<pre><code class="language-c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_LoopLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// Loop for introducing control divergence</span>
+	<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+		<span class="hljs-comment">// Try - Lock</span>
+		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) != <span class="hljs-number">0</span>) {
+			<span class="hljs-comment">// Work</span>
+			<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+			<span class="hljs-comment">// Unlock</span>
+			*lock = <span class="hljs-number">1</span>;
+			<span class="hljs-keyword">break</span>;
+		}
+	}
+}
+</code></pre>
+<p>LoopLock的执行和TicketLock是一模一样的（有可能性能会差点吧，毕竟这里是dynamic loop，而TicketLoop是可以被循环展开的），只是写法上不同而已，这里我们就不用写死<code>32</code>这个数字了，各个线程的编号将由GPU对atomicExch的调度来决定。</p>
+<h1 id="源代码">源代码</h1>
+<p>这一节没别的，就是代码。封装了的LoopLock的代码和实验用的代码。</p>
+<h2 id="封装了的looplock">封装了的LoopLock</h2>
+<pre><code class="language-c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LoopLock</span>{
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-keyword">using</span> LockType = <span class="hljs-type">int32_t</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-keyword">class</span> <span class="hljs-title class_">GPUVer</span> {
+	<span class="hljs-keyword">public</span>:
+		<span class="hljs-built_in">GPUVer</span>(LockType* d_lock): <span class="hljs-built_in">d_lock</span>(d_lock) {}
+
+		<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_Func&gt;
+		__device__ <span class="hljs-type">void</span> <span class="hljs-title">WithLock</span><span class="hljs-params">(T_Func func)</span> </span>{
+			<span class="hljs-keyword">do</span> {
+				<span class="hljs-keyword">if</span> (<span class="hljs-built_in">atomicCAS</span>(d_lock, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>) == <span class="hljs-number">1</span>) {
+					<span class="hljs-built_in">func</span>();
+					*d_lock = <span class="hljs-number">1</span>;
+					<span class="hljs-keyword">break</span>;
+				}
+			} <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>);
+		}
+
+	<span class="hljs-keyword">private</span>:
+		LockType* d_lock;
+	};
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Alloc</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(LockType))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		LockType lock = <span class="hljs-number">1</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(LockType), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_gpuVer), <span class="hljs-built_in">sizeof</span>(GPUVer))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		<span class="hljs-function">GPUVer <span class="hljs-title">gpuVer</span><span class="hljs-params">(d_lock)</span></span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_gpuVer, &amp;gpuVer, <span class="hljs-built_in">sizeof</span>(GPUVer), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">return</span> et;
+	}
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Free</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_lock)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_lock = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_gpuVer)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_gpuVer = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">return</span> et;
+	}
+
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-comment">// 1: not locked</span>
+	<span class="hljs-comment">// 0: locked</span>
+	LockType* d_lock = <span class="hljs-literal">nullptr</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">GPUVer* <span class="hljs-title">GetGPUVer</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">return</span> d_gpuVer;
+	}
+
+<span class="hljs-keyword">private</span>:
+	GPUVer* d_gpuVer = <span class="hljs-literal">nullptr</span>;
+};
+</code></pre>
+<h2 id="实验用的全部代码">实验用的全部代码</h2>
+<pre><code class="language-c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cuda_runtime.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;device_launch_parameters.h&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> CheckCuda(x) {\
+	<span class="hljs-keyword">if</span>(x != cudaSuccess) \
+		cerr &lt;&lt; <span class="hljs-string">&quot;[CUDA Error][&quot;</span> &lt;&lt; __FILE__ &lt;&lt; <span class="hljs-string">&quot; Line &quot;</span> &lt;&lt; __LINE__ &lt;&lt; <span class="hljs-string">&quot;]\n\t[&quot;</span> \
+			&lt;&lt; cudaGetErrorName(x) &lt;&lt; <span class="hljs-string">&quot;] &quot;</span> \
+			&lt;&lt; cudaGetErrorString(x) &lt;&lt; endl; \
+}</span>
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LoopLock</span>{
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-keyword">using</span> LockType = <span class="hljs-type">int32_t</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-keyword">class</span> <span class="hljs-title class_">GPUVer</span> {
+	<span class="hljs-keyword">public</span>:
+		<span class="hljs-built_in">GPUVer</span>(LockType* d_lock): <span class="hljs-built_in">d_lock</span>(d_lock) {}
+
+		<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T_Func&gt;
+		__device__ <span class="hljs-type">void</span> <span class="hljs-title">WithLock</span><span class="hljs-params">(T_Func func)</span> </span>{
+			<span class="hljs-keyword">do</span> {
+				<span class="hljs-keyword">if</span> (<span class="hljs-built_in">atomicCAS</span>(d_lock, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>) == <span class="hljs-number">1</span>) {
+					<span class="hljs-built_in">func</span>();
+					*d_lock = <span class="hljs-number">1</span>;
+					<span class="hljs-keyword">break</span>;
+				}
+			} <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>);
+		}
+
+	<span class="hljs-keyword">private</span>:
+		LockType* d_lock;
+	};
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Alloc</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(LockType))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		LockType lock = <span class="hljs-number">1</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(LockType), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_gpuVer), <span class="hljs-built_in">sizeof</span>(GPUVer))) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		<span class="hljs-function">GPUVer <span class="hljs-title">gpuVer</span><span class="hljs-params">(d_lock)</span></span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaMemcpy</span>(d_gpuVer, &amp;gpuVer, <span class="hljs-built_in">sizeof</span>(GPUVer), cudaMemcpyHostToDevice)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+
+		<span class="hljs-keyword">return</span> et;
+	}
+	<span class="hljs-function">cudaError_t <span class="hljs-title">Free</span><span class="hljs-params">()</span> </span>{
+		cudaError_t et;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_lock)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_lock = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">if</span> ((et = <span class="hljs-built_in">cudaFree</span>(d_gpuVer)) != cudaSuccess)
+			<span class="hljs-keyword">return</span> et;
+		d_gpuVer = <span class="hljs-literal">nullptr</span>;
+		<span class="hljs-keyword">return</span> et;
+	}
+
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-comment">// 1: not locked</span>
+	<span class="hljs-comment">// 0: locked</span>
+	LockType* d_lock = <span class="hljs-literal">nullptr</span>;
+
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function">GPUVer* <span class="hljs-title">GetGPUVer</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">return</span> d_gpuVer;
+	}
+
+<span class="hljs-keyword">private</span>:
+	GPUVer* d_gpuVer = <span class="hljs-literal">nullptr</span>;
+};
+
+
+<span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">device_TestFunc</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ti, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i entered with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+	*value = *value + <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %i exited with value %i\n&quot;</span>, (<span class="hljs-type">int32_t</span>)ti, (<span class="hljs-type">int32_t</span>)*value);
+}
+<span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> N = <span class="hljs-number">5</span>;
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	Origin</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_origin</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_origin</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_origin&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+}
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	LoopLock Class</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_LoopLock_Class</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, LoopLock::GPUVer* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	lock-&gt;<span class="hljs-built_in">WithLock</span>(
+		[&amp;]() {
+			<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+		}
+	);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_LoopLock_Class</span><span class="hljs-params">()</span> </span>{
+	LoopLock lock;
+	<span class="hljs-built_in">CheckCuda</span>(lock.<span class="hljs-built_in">Alloc</span>());
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_LoopLock_Class&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, lock.<span class="hljs-built_in">GetGPUVer</span>());
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(lock.<span class="hljs-built_in">Free</span>());
+}
+
+
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	LoopLock</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_LoopLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-comment">// Loop for introducing control divergence</span>
+	<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+		<span class="hljs-comment">// Try - Lock</span>
+		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) != <span class="hljs-number">0</span>) {
+			<span class="hljs-comment">// Work</span>
+			<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+			<span class="hljs-comment">// Unlock</span>
+			*lock = <span class="hljs-number">1</span>;
+			<span class="hljs-keyword">break</span>;
+		}
+	}
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_LoopLock</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">int32_t</span>* d_lock;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>)));
+	<span class="hljs-type">int32_t</span> lock = <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>), cudaMemcpyHostToDevice));
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_LoopLock&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, d_lock);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_lock));
+}
+
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	TicketLock</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_TicketLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">32</span>; i++) {
+		<span class="hljs-keyword">if</span> (ti % <span class="hljs-number">32</span> != i)
+			<span class="hljs-keyword">continue</span>;
+
+		<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+			;
+		<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+		*lock = <span class="hljs-number">1</span>;
+	}
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_TicketLock</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">int32_t</span>* d_lock;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>)));
+	<span class="hljs-type">int32_t</span> lock = <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>), cudaMemcpyHostToDevice));
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_TicketLock&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, d_lock);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_lock));
+}
+
+
+
+
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-comment">//	SpinLock</span>
+<span class="hljs-comment">// =====================================================</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">kernel__Test_SpinLock</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, <span class="hljs-type">size_t</span>* value, <span class="hljs-type">int32_t</span>* lock)</span> </span>{
+	<span class="hljs-keyword">auto</span> ti = blockDim.x * blockIdx.x + threadIdx.x;
+	<span class="hljs-keyword">if</span> (ti &gt;= n)
+		<span class="hljs-keyword">return</span>;
+	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">atomicExch</span>(lock, <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)
+		;
+	<span class="hljs-built_in">device_TestFunc</span>(ti, value);
+	*lock = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test_SpinLock</span><span class="hljs-params">()</span> </span>{
+	<span class="hljs-type">int32_t</span>* d_lock;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_lock), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>)));
+	<span class="hljs-type">int32_t</span> lock = <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_lock, &amp;lock, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int32_t</span>), cudaMemcpyHostToDevice));
+
+	<span class="hljs-type">size_t</span>* d_value;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMalloc</span>(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(&amp;d_value), <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>)));
+	<span class="hljs-type">size_t</span> value = <span class="hljs-number">0</span>;
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaMemcpy</span>(d_value, &amp;value, <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">size_t</span>), cudaMemcpyHostToDevice));
+
+	kernel__Test_SpinLock&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(N, d_value, d_lock);
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaDeviceSynchronize</span>());
+
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_value));
+	<span class="hljs-built_in">CheckCuda</span>(<span class="hljs-built_in">cudaFree</span>(d_lock));
+}
+
+
+
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test Origin ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_origin</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test LoopLock Class ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_LoopLock_Class</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test LoopLock ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_LoopLock</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test TicketLock ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_TicketLock</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+	cout &lt;&lt; <span class="hljs-string">&quot;---- Test SpinLock ----\n&quot;</span>;
+	<span class="hljs-built_in">Test_SpinLock</span>();
+	cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+
+        
+        
+    </body>
+    </html>
